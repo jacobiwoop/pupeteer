@@ -39,7 +39,7 @@ app.get('/', async (req, res) => {
     }
 
     const { browser, page } = session;
-    await page.goto('https://example.com', { waitUntil: 'domcontentloaded' });
+    await page.goto('https://google.com', { waitUntil: 'domcontentloaded' });
     const title = await page.title();
 
     await browser.close();
