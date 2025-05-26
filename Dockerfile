@@ -1,7 +1,7 @@
 # Utilise une image Node.js officielle
 FROM node:22.14.0-slim
 
-# Installe les dépendances système nécessaires pour Puppeteer (et Chromium)
+# Installe les dépendances système nécessaires pour Puppeteer et Chromium
 RUN apt-get update && apt-get install -y \
     wget \
     ca-certificates \
@@ -20,19 +20,20 @@ RUN apt-get update && apt-get install -y \
     libxdamage1 \
     libxrandr2 \
     xdg-utils \
+    libgbm1 \  # <=== Ajoute cette ligne
     --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # Crée le dossier de l'application
 WORKDIR /app
 
-# Initialise un projet Node.js automatiquement (comme npm init -y)
+# Initialise le projet Node.js
 RUN npm init -y
 
-# Installe puppeteer et express et sauvegarde dans package.json et package-lock.json
+# Installe puppeteer et express
 RUN npm install puppeteer express
 
-# Copie les fichiers de l'application dans le conteneur
+# Copie les fichiers de l'application
 COPY . .
 
 # Expose le port
