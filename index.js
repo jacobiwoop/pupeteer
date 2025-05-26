@@ -2,7 +2,7 @@ const express = require('express');
 const puppeteer = require('puppeteer');
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = 3000;
 
 async function startBrowser() {
     let browser;
