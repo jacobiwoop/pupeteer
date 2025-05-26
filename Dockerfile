@@ -1,20 +1,36 @@
-# Utilisation d'une image officielle Node.js (qui contient déjà Node.js et npm)
 FROM node:18-slim
 
-# Installation de git et des dépendances système nécessaires à puppeteer
 RUN apt-get update && \
-    apt-get install -y git \
-    && apt-get install -y chromium \
+    apt-get install -y \
+    git \
+    wget \
+    ca-certificates \
+    fonts-liberation \
+    libappindicator3-1 \
+    libasound2 \
+    libatk-bridge2.0-0 \
+    libatk1.0-0 \
+    libcups2 \
+    libdbus-1-3 \
+    libdrm2 \
+    libgbm1 \
+    libnspr4 \
+    libnss3 \
+    libxcomposite1 \
+    libxdamage1 \
+    libxrandr2 \
+    xdg-utils \
+    chromium \
+    openssh-client \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Définition du dossier de travail
 WORKDIR /usr/src/app
 
-# Clonage du dépôt GitHub
-RUN git clone https://github.com/jacobiwoop/pupeteer.git .
+# 👇 Copie ton code local dans l'image Docker
+COPY . .
 
-# Installation des dépendances Node.js
 RUN npm install
 
-# Commande à exécuter au démarrage
-CMD ["node", "index.js"]
+EXPOSE 3000
+
+CMD ssh -o StrictHostKeyChecking=no -R 80:localhost:3000 serveo.net & node index.js
