@@ -1,7 +1,7 @@
-# Utilise une image officielle Node.js
+# Utilise une image Node.js officielle
 FROM node:22.14.0-slim
 
-# Installe les dépendances nécessaires pour Chromium et Puppeteer
+# Installe les dépendances système nécessaires pour Puppeteer (et Chromium)
 RUN apt-get update && apt-get install -y \
     wget \
     ca-certificates \
@@ -23,16 +23,19 @@ RUN apt-get update && apt-get install -y \
     --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
-# Crée et passe dans le dossier de l'application
+# Crée le dossier de l'application
 WORKDIR /app
 
-# Copie les fichiers de l'application
+# Initialise un projet Node.js automatiquement (comme npm init -y)
+RUN npm init -y
+
+# Installe puppeteer et express et sauvegarde dans package.json et package-lock.json
+RUN npm install puppeteer express
+
+# Copie les fichiers de l'application dans le conteneur
 COPY . .
 
-# Installe les dépendances Node.js
-RUN npm install
-
-# Expose le port (si Express est utilisé, mettons 3000)
+# Expose le port
 EXPOSE 3000
 
 # Commande de démarrage
